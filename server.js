@@ -6,6 +6,7 @@ const port = process.env.PORT;
 const AuthRouterClass = require('./Auth/auth.routes');
 const MatchRouterClass = require('./Matchs/match.routes');
 const FriendsRouterClass = require('./Friends/friends.routes');
+const BetRoomRouterClass = require('./BetRoom/betroom.routes');
 
 const mongoose = require('mongoose');
 mongoose.set('useFindAndModify', false);
@@ -33,10 +34,12 @@ app.use(bodyParser.json());
 const authRouter = new AuthRouterClass();
 const matchRouter = new MatchRouterClass();
 const friendsRouter = new FriendsRouterClass();
+const betRoomRouter = new BetRoomRouterClass();
 
 app.use('/api/match', matchRouter.init());
 app.use('/api/auth', authRouter.init());
 app.use('/api/friends', friendsRouter.init());
+app.use('/api/betroom', betRoomRouter.init());
 
 app.listen(port, () => {
     console.log(`Listen on http://localhost:${port}`);

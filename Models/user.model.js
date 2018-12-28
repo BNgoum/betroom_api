@@ -20,6 +20,10 @@ const userSchema = new Schema({
         accepted: [{ type: Schema.Types.ObjectId }],
         pending: [{ type: Schema.Types.ObjectId }],
         recipient: [{ type: Schema.Types.ObjectId }]
+    },
+    bet_room: {
+        creator: [{ type: Schema.Types.ObjectId }],
+        participant: [{ type: Schema.Types.ObjectId }]
     }
 })
 //
