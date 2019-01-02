@@ -19,6 +19,7 @@ const create = body => {
             owner: body.owner,
             participants: body.participants,
             reward: body.reward,
+            matchs: body.matchs,
             betsNumber: body.betsNumber,
             onGoing: false,
             isBegin: false,
