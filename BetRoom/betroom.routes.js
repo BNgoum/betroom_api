@@ -19,7 +19,7 @@ class BetRoomRouterClass {
         // Create a new Bet Room
         BetRoomRouter.post('/create', (req, res) => {
             // Check for mandatories
-            const { miss, extra, ok } = checkFields(['name', 'owner', 'participants', 'stake', 'betsNumber'], req.body);
+            const { miss, extra, ok } = checkFields(['name', 'owner', 'participants', 'reward', 'betsNumber'], req.body);
 
             // Check oppropriated values
             if( !ok ){ sendFieldsError( res, 'Bad fields provided', miss, extra ) }
