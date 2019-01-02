@@ -16,6 +16,7 @@ const create = body => {
         resolve(BetRoomModel.create({
             _id: mongoose.Types.ObjectId(),
             name: body.name,
+            owner: body.owner,
             participants: body.participants,
             stake: body.stake,
             betsNumber: body.betsNumber,

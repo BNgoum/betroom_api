@@ -11,10 +11,8 @@ Model definition
 const betRoomSchema = new Schema({
     _id: Schema.ObjectId,
     name: String,
-    participants: {
-        creator: { type: Schema.Types.ObjectId },
-        participants: [{ type: Schema.Types.ObjectId }]
-    },
+    owner: { type: Schema.Types.ObjectId },
+    participants: [{ type: Schema.Types.ObjectId }],
     stake: String,
     onGoing: Boolean,
     isBegin: Boolean,
