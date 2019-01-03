@@ -2,6 +2,7 @@
 Import
 */
 const BetRoomModel = require('../Models/betroom.model');
+const UserModel = require('../Models/user.model');
 const mongoose = require('mongoose');
 //
 
@@ -13,7 +14,7 @@ const create = body => {
     return new Promise( (resolve, reject) => {
         if (body === '') { reject('Aucune données dans le body (betroom controller).')}
 
-        resolve(BetRoomModel.create({
+        BetRoomModel.create({
             _id: mongoose.Types.ObjectId(),
             name: body.name,
             owner: body.owner,
@@ -24,11 +25,39 @@ const create = body => {
             onGoing: false,
             isBegin: false,
             ranking: null
-        }))
+        })
     }, (err, success) => {
         if (err) return handleError(err);
 
-        console.log('Success for creating a BR ! : ', success);
+        return resolve(success);
+    })
+}
+
+const addOwner = body => {
+    // Request to add an owner
+    return new Promise((resolve, reject) => {
+        UserModel.findOneAndUpdate({ _id: body.idOwner }, { $push: { "bet_room.owner": body.idBetRoom } }, (error, success) => {
+            if(error){ // Mongo Error
+                return reject(error)
+            }
+            else {
+                return resolve(success)
+            }
+        })
+    })
+}
+
+const addParticipant = body => {
+    // Request to add an owner
+    return new Promise((resolve, reject) => {
+        UserModel.findOneAndUpdate({ _id: body.idParticipant }, { $push: { "bet_room.participant": body.idBetRoom } }, (error, success) => {
+            if(error){ // Mongo Error
+                return reject(error)
+            }
+            else {
+                return resolve(success)
+            }
+        })
     })
 }
 //
@@ -37,6 +66,8 @@ const create = body => {
 Export
 */
 module.exports = {
-    create
+    create,
+    addOwner,
+    addParticipant
 }
 //
