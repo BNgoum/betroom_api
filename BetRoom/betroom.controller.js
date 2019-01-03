@@ -25,11 +25,11 @@ const create = body => {
             onGoing: false,
             isBegin: false,
             ranking: null
+        }, (err, success) => {
+            if (err) return handleError(err);
+    
+            return resolve(success);
         })
-    }, (err, success) => {
-        if (err) return handleError(err);
-
-        return resolve(success);
     })
 }
 
