@@ -33,6 +33,20 @@ const create = body => {
     })
 }
 
+const getBetRoom = body => {
+    // Request to add an owner
+    return new Promise((resolve, reject) => {
+        BetRoomModel.findOne({ _id: body.idBetRoom }, (error, success) => {
+            if(error){ // Mongo Error
+                return reject(error)
+            }
+            else {
+                return resolve(success)
+            }
+        })
+    })
+}
+
 const addOwner = body => {
     // Request to add an owner
     return new Promise((resolve, reject) => {
@@ -67,6 +81,7 @@ Export
 */
 module.exports = {
     create,
+    getBetRoom,
     addOwner,
     addParticipant
 }

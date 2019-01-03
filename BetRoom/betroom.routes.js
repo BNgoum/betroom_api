@@ -3,7 +3,7 @@ Imports
 */
 const express = require('express');
 const BetRoomRouter = express.Router({ mergeParams: true });
-const { create, addOwner, addParticipant } = require('./betroom.controller');
+const { create, getBetRoom, addOwner, addParticipant } = require('./betroom.controller');
 
 // INNER
 const { checkFields } = require('../Services/request.checker');
@@ -27,6 +27,20 @@ class BetRoomRouterClass {
             create(req.body)
             .then( apiRes => sendApiSuccessResponse(res, 'A new Bet Room is created !', apiRes) )
             .catch( apiErr => sendApiErrorResponse(res, 'Error when creating a Bet Room', apiErr) )
+        });
+
+        // get a bet room
+        BetRoomRouter.get('/getBetRoom', (req, res) => {
+            // Check for mandatories
+            const { miss, extra, ok } = checkFields(['idBetRoom'], req.body);
+
+            // Check oppropriated values
+            if( !ok ){ sendFieldsError( res, 'Bad fields provided', miss, extra ) }
+
+            // Use controller function
+            getBetRoom(req.body)
+            .then( apiRes => sendApiSuccessResponse(res, 'The bet Room : ', apiRes) )
+            .catch( apiErr => sendApiErrorResponse(res, 'Error when getting a Bet Room', apiErr) )
         });
 
         // Add an owner
