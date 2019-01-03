@@ -30,7 +30,7 @@ class BetRoomRouterClass {
         });
 
         // get a bet room
-        BetRoomRouter.get('/getBetRoom', (req, res) => {
+        BetRoomRouter.post('/getBetRoom', (req, res) => {
             // Check for mandatories
             const { miss, extra, ok } = checkFields(['idBetRoom'], req.body);
 
