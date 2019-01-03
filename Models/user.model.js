@@ -22,7 +22,7 @@ const userSchema = new Schema({
         recipient: [{ type: Schema.Types.ObjectId }]
     },
     bet_room: {
-        creator: [{ type: Schema.Types.ObjectId }],
+        owner: [{ type: Schema.Types.ObjectId }],
         participant: [{ type: Schema.Types.ObjectId }]
     }
 })
