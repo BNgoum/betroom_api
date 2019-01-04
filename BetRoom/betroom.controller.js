@@ -47,6 +47,34 @@ const getBetRoom = body => {
     })
 }
 
+const getAllBetRoomOwner = body => {
+    // Request to add an owner
+    return new Promise((resolve, reject) => {
+        UserModel.findOne({ _id: body._id }, (error, success) => {
+            if(error){ // Mongo Error
+                return reject(error)
+            }
+            else {
+                return resolve(success.bet_room.owner)
+            }
+        })
+    })
+}
+
+const getAllBetRoomParticipant = body => {
+    // Request to add an owner
+    return new Promise((resolve, reject) => {
+        UserModel.findOne({ _id: body._id }, (error, success) => {
+            if(error){ // Mongo Error
+                return reject(error)
+            }
+            else {
+                return resolve(success.bet_room.participant)
+            }
+        })
+    })
+}
+
 const addOwner = body => {
     // Request to add an owner
     return new Promise((resolve, reject) => {
@@ -83,6 +111,8 @@ module.exports = {
     create,
     getBetRoom,
     addOwner,
-    addParticipant
+    addParticipant,
+    getAllBetRoomOwner,
+    getAllBetRoomParticipant
 }
 //

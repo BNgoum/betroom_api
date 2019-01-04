@@ -3,7 +3,7 @@ Imports
 */
 const express = require('express');
 const BetRoomRouter = express.Router({ mergeParams: true });
-const { create, getBetRoom, addOwner, addParticipant } = require('./betroom.controller');
+const { create, getBetRoom, addOwner, addParticipant, getAllBetRoomOwner, getAllBetRoomParticipant } = require('./betroom.controller');
 
 // INNER
 const { checkFields } = require('../Services/request.checker');
@@ -41,6 +41,34 @@ class BetRoomRouterClass {
             getBetRoom(req.body)
             .then( apiRes => sendApiSuccessResponse(res, 'The bet Room : ', apiRes) )
             .catch( apiErr => sendApiErrorResponse(res, 'Error when getting a Bet Room', apiErr) )
+        });
+
+        // get all owner bet room
+        BetRoomRouter.post('/getAllBetRoomOwner', (req, res) => {
+            // Check for mandatories
+            const { miss, extra, ok } = checkFields(['_id'], req.body);
+
+            // Check oppropriated values
+            if( !ok ){ sendFieldsError( res, 'Bad fields provided', miss, extra ) }
+
+            // Use controller function
+            getAllBetRoomOwner(req.body)
+            .then( apiRes => sendApiSuccessResponse(res, 'All owner bet rooms : ', apiRes) )
+            .catch( apiErr => sendApiErrorResponse(res, 'Error when getting all owner Bet Room', apiErr) )
+        });
+
+        // get all owner bet room
+        BetRoomRouter.post('/getAllBetRoomParticipant', (req, res) => {
+            // Check for mandatories
+            const { miss, extra, ok } = checkFields(['_id'], req.body);
+
+            // Check oppropriated values
+            if( !ok ){ sendFieldsError( res, 'Bad fields provided', miss, extra ) }
+
+            // Use controller function
+            getAllBetRoomParticipant(req.body)
+            .then( apiRes => sendApiSuccessResponse(res, 'All participant bet rooms : ', apiRes) )
+            .catch( apiErr => sendApiErrorResponse(res, 'Error when getting all participant Bet Room', apiErr) )
         });
 
         // Add an owner
