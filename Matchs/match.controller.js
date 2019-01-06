@@ -58,7 +58,9 @@ const fetchMatchs = body => {
                                     heureMatch: moment(element.utcDate).format('HH:mm:ss'),
                                     gagnant: element.score.winner,
                                     scoreHomeTeam: element.score.fullTime.homeTeam,
-                                    scoreAwayTeam: element.score.fullTime.awayTeam
+                                    scoreAwayTeam: element.score.fullTime.awayTeam,
+                                    scoreHomeTeamInputUser: 0,
+                                    scoreAwayTeamInputUser: 0
                                 })
         
                                 // Save match

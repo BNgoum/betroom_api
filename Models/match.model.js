@@ -19,6 +19,8 @@ const matchSchema = new Schema({
     gagnant: String,
     scoreHomeTeam: Number,
     scoreAwayTeam: Number,
+    scoreHomeTeamInputUser: Number,
+    scoreAwayTeamInputUser: Number,
 })
 //
 
