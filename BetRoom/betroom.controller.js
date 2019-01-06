@@ -22,8 +22,7 @@ const create = body => {
             reward: body.reward,
             matchs: body.matchs,
             betsNumber: body.betsNumber,
-            onGoing: false,
-            isBegin: false,
+            statut: "Pas débuté",
             ranking: null
         }, (err, success) => {
             if (err) return handleError(err);
