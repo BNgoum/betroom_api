@@ -15,8 +15,9 @@ const betRoomSchema = new Schema({
     participants: [{ type: Schema.Types.ObjectId }],
     reward: String,
     matchs: [],
-    onGoing: Boolean,
-    isBegin: Boolean,
+    statut: String,
+    // onGoing: Boolean,
+    // isBegin: Boolean,
     betsNumber: Number,
     ranking: { type: Schema.Types.ObjectId },
 })
