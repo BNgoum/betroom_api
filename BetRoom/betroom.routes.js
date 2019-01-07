@@ -74,7 +74,7 @@ class BetRoomRouterClass {
         // Add an owner
         BetRoomRouter.put('/put/addOwner', (req, res) => {
             // Check for mandatories
-            const { miss, extra, ok } = checkFields(['idOwner', 'idBetRoom'], req.body);
+            const { miss, extra, ok } = checkFields(['idOwner', 'betRoom'], req.body);
 
             // Check oppropriated values
             if( !ok ){ sendFieldsError( res, 'Bad fields provided', miss, extra ) }
@@ -88,7 +88,7 @@ class BetRoomRouterClass {
         // Add a participant
         BetRoomRouter.put('/put/addParticipant', (req, res) => {
             // Check for mandatories
-            const { miss, extra, ok } = checkFields(['idParticipant', 'idBetRoom'], req.body);
+            const { miss, extra, ok } = checkFields(['idParticipant', 'betRoom'], req.body);
 
             // Check oppropriated values
             if( !ok ){ sendFieldsError( res, 'Bad fields provided', miss, extra ) }

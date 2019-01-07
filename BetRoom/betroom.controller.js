@@ -77,7 +77,7 @@ const getAllBetRoomParticipant = body => {
 const addOwner = body => {
     // Request to add an owner
     return new Promise((resolve, reject) => {
-        UserModel.findOneAndUpdate({ _id: body.idOwner }, { $push: { "bet_room.owner": body.idBetRoom } }, (error, success) => {
+        UserModel.findOneAndUpdate({ _id: body.idOwner }, { $push: { "bet_room.owner": body.betRoom } }, (error, success) => {
             if(error){ // Mongo Error
                 return reject(error)
             }
@@ -91,7 +91,7 @@ const addOwner = body => {
 const addParticipant = body => {
     // Request to add an owner
     return new Promise((resolve, reject) => {
-        UserModel.findOneAndUpdate({ _id: body.idParticipant }, { $push: { "bet_room.participant": body.idBetRoom } }, (error, success) => {
+        UserModel.findOneAndUpdate({ _id: body.idParticipant }, { $push: { "bet_room.participant": body.betRoom } }, (error, success) => {
             if(error){ // Mongo Error
                 return reject(error)
             }
