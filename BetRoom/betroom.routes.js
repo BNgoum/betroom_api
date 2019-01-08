@@ -3,7 +3,7 @@ Imports
 */
 const express = require('express');
 const BetRoomRouter = express.Router({ mergeParams: true });
-const { create, getBetRoom, addOwner, addParticipant, getAllBetRoomOwner, getAllBetRoomParticipant } = require('./betroom.controller');
+const { create, getBetRoom, addOwner, addParticipant, getAllBetRoomOwner, getAllBetRoomParticipant, setTeamScore } = require('./betroom.controller');
 
 // INNER
 const { checkFields } = require('../Services/request.checker');
@@ -97,6 +97,20 @@ class BetRoomRouterClass {
             addParticipant(req.body)
             .then( apiRes => sendApiSuccessResponse(res, 'A participant is now added ! : ', apiRes) )
             .catch( apiErr => sendApiErrorResponse(res, 'Error when adding a participant : ', apiErr) )
+        });
+
+        // Add a participant
+        BetRoomRouter.put('/put/teamScore', (req, res) => {
+            // Check for mandatories
+            const { miss, extra, ok } = checkFields(['_id', 'typeParticipant', 'idBetRoom', 'idMatch', 'scoreHomeTeam', 'scoreAwayTeam'], req.body);
+
+            // Check oppropriated values
+            if( !ok ){ sendFieldsError( res, 'Bad fields provided', miss, extra ) }
+
+            // Use controller function
+            setTeamScore(req.body)
+            .then( apiRes => sendApiSuccessResponse(res, 'Set team score : ', apiRes) )
+            .catch( apiErr => sendApiErrorResponse(res, 'Error when setting team score : ', apiErr) )
         });
     };
 

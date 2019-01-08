@@ -101,6 +101,55 @@ const addParticipant = body => {
         })
     })
 }
+
+const setTeamScore = body => {
+    // Request to set score
+    return new Promise((resolve, reject) => {
+        UserModel.findById({ _id: body._id } , (error, success) => {
+            if(error) { // Mongo Error
+                return reject(error)
+            }
+            else {
+                if ( body.typeParticipant === "owner" ) {
+                    success.bet_room.owner.map(betroom => {      
+                        if ( betroom._id === body.idBetRoom ) {
+                            betroom.matchs.map(match => {
+                                if ( match._id === body.idMatch) {
+                                    match.scoreHomeTeamInputUser = parseInt(body.scoreHomeTeam);
+                                    match.scoreAwayTeamInputUser = parseInt(body.scoreAwayTeam);
+                                }
+                            })
+                        }
+                    })
+                } else {
+                    success.bet_room.participant.map(betroom => {      
+                        if ( betroom._id === body.idBetRoom ) {
+                            betroom.matchs.map(match => {
+                                if ( match._id === body.idMatch) {
+                                    match.scoreHomeTeamInputUser = parseInt(body.scoreHomeTeam);
+                                    match.scoreAwayTeamInputUser = parseInt(body.scoreAwayTeam);
+                                }
+                            })
+                        }
+                    })
+                }
+
+                UserModel.findById({ _id: body._id }, (err, user) => {
+                    if(err) { // Mongo Error
+                        return reject(err)
+                    }
+
+                    user.set({ bet_room: success.bet_room });
+                    user.save(function (err, updatedUser) {
+                        if (err) return handleError(err);
+                        return resolve(updatedUser)
+                    });
+                })
+            }
+        })
+        
+    })
+}
 //
 
 /*
@@ -112,6 +161,7 @@ module.exports = {
     addOwner,
     addParticipant,
     getAllBetRoomOwner,
-    getAllBetRoomParticipant
+    getAllBetRoomParticipant,
+    setTeamScore
 }
 //
