@@ -3,7 +3,7 @@ Imports
 */
 const express = require('express');
 const matchRouter = express.Router({ mergeParams: true });
-const { fetchMatchs, getMatchs } = require('./match.controller');
+const { fetchMatchs, getMatchs, getMatch } = require('./match.controller');
 const mongoose = require('mongoose');
 
 // INNER
@@ -52,6 +52,21 @@ class MatchRouterClass {
             getMatchs(req.body)
             .then( apiRes =>  sendApiSuccessResponse(res, 'Matchs of championnat find', apiRes) )
             .catch( apiErr => sendApiErrorResponse(res, 'Matchs of championnat not find', apiErr) )
+        });
+
+        // Get one match
+        matchRouter.get('/match', (req, res) => {
+
+            // Check for mandatories
+            const { miss, extra, ok } = checkFields(['_id'], req.body);
+
+            // Check oppropriated values
+            if( !ok ){ sendFieldsError( res, 'Bad fields provided', miss, extra ) }
+
+            // Use controller function
+            getMatch(req.body)
+            .then( apiRes =>  sendApiSuccessResponse(res, 'Match find', apiRes) )
+            .catch( apiErr => sendApiErrorResponse(res, 'Match not find', apiErr) )
         });
     };
 

@@ -7,6 +7,7 @@ const MatchModel = require('../Models/match.model');
 const collectionMatch = db.collection('matches');
 const moment = require('moment');
 const fetch = require("node-fetch");
+const axios = require("axios");
 //
 
 const apiHeaders = { 'X-Auth-Token': '74a86b94a67541189f94e8266901f6e4' }
@@ -47,25 +48,25 @@ const fetchMatchs = body => {
                             return response.json();
                         })
                         .then(data => {
-                            data.matches.forEach(function(element) {
-                                let match = new MatchModel({
-                                    _id: mongoose.Types.ObjectId(),
+                            data.matches.forEach(function(match) {
+                                let newMatch = new MatchModel({
+                                    _id: match.id,
                                     championnat: i,
-                                    homeTeam: element.homeTeam.name,
-                                    awayTeam: element.awayTeam.name,
-                                    dateHeureMatch: element.utcDate,
-                                    dateMatch: moment(element.utcDate).format('DD-MM-YYYY'),
-                                    heureMatch: moment(element.utcDate).format('HH:mm:ss'),
-                                    gagnant: element.score.winner,
-                                    scoreHomeTeam: element.score.fullTime.homeTeam,
-                                    scoreAwayTeam: element.score.fullTime.awayTeam,
+                                    homeTeam: match.homeTeam.name,
+                                    awayTeam: match.awayTeam.name,
+                                    dateHeureMatch: match.utcDate,
+                                    dateMatch: moment(match.utcDate).format('DD-MM-YYYY'),
+                                    heureMatch: moment(match.utcDate).format('HH:mm:ss'),
+                                    gagnant: match.score.winner,
+                                    scoreHomeTeam: match.score.fullTime.homeTeam,
+                                    scoreAwayTeam: match.score.fullTime.awayTeam,
                                     scoreHomeTeamInputUser: 0,
                                     scoreAwayTeamInputUser: 0,
-                                    statut: element.status
+                                    statut: match.status
                                 })
         
                                 // Save match
-                                MatchModel.create(match, (error, newMatch) => {
+                                MatchModel.create(newMatch, (error, newMatch) => {
                                     if(error){ // Mongo error
                                         return reject(error)
                                     }
@@ -119,11 +120,24 @@ const getMatchs = body => {
     })
 };
 
+const getMatch = body => {
+    return new Promise( (resolve, reject ) => {
+        return resolve(axios.get('https://api.football-data.org/v2/matches/' + body._id, { headers: apiHeaders }))
+    })
+    .then( data => {
+        return data;
+    })
+    .catch(err => {
+        console.log('Erreur lors de la tentative de la récupération des infos d\'un match : ', err);
+    });
+};
+
 /*
 Export
 */
 module.exports = {
     fetchMatchs,
-    getMatchs
+    getMatchs,
+    getMatch
 }
 //

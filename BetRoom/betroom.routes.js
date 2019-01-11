@@ -99,7 +99,21 @@ class BetRoomRouterClass {
             .catch( apiErr => sendApiErrorResponse(res, 'Error when adding a participant : ', apiErr) )
         });
 
-        // Add a participant
+        // Set user input team score
+        BetRoomRouter.put('/put/teamScore', (req, res) => {
+            // Check for mandatories
+            const { miss, extra, ok } = checkFields(['_id', 'typeParticipant', 'idBetRoom', 'idMatch', 'scoreHomeTeam', 'scoreAwayTeam'], req.body);
+
+            // Check oppropriated values
+            if( !ok ){ sendFieldsError( res, 'Bad fields provided', miss, extra ) }
+
+            // Use controller function
+            setTeamScore(req.body)
+            .then( apiRes => sendApiSuccessResponse(res, 'Set team score : ', apiRes) )
+            .catch( apiErr => sendApiErrorResponse(res, 'Error when setting team score : ', apiErr) )
+        });
+
+        // Set info match
         BetRoomRouter.put('/put/teamScore', (req, res) => {
             // Check for mandatories
             const { miss, extra, ok } = checkFields(['_id', 'typeParticipant', 'idBetRoom', 'idMatch', 'scoreHomeTeam', 'scoreAwayTeam'], req.body);
