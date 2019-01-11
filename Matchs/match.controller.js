@@ -49,7 +49,8 @@ const fetchMatchs = body => {
                         .then(data => {
                             data.matches.forEach(function(match) {
                                 let newMatch = new MatchModel({
-                                    _id: match.id,
+                                    _id: mongoose.Types.ObjectId,
+                                    idMatch: match.id,
                                     championnat: i,
                                     homeTeam: match.homeTeam.name,
                                     awayTeam: match.awayTeam.name,
