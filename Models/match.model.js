@@ -9,7 +9,7 @@ const { Schema } = mongoose;
 Model definition
 */
 const matchSchema = new Schema({
-    _id: Schema.ObjectId,
+    _id: String,
     championnat: String,
     homeTeam: String,
     awayTeam: String,
