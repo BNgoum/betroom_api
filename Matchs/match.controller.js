@@ -48,6 +48,13 @@ const fetchMatchs = body => {
                         })
                         .then(data => {
                             data.matches.forEach(function(match) {
+                                let scoreHT = 0;
+                                let scoreAT = 0;
+                                if (match.score.fullTime.homeTeam !== null) {
+                                    scoreHT = match.score.fullTime.homeTeam;
+                                    scoreAT = match.score.fullTime.awayTeam;
+                                }
+
                                 let newMatch = new MatchModel({
                                     _id: match.id,
                                     championnat: i,
@@ -57,8 +64,8 @@ const fetchMatchs = body => {
                                     dateMatch: moment(match.utcDate).format('DD-MM-YYYY'),
                                     heureMatch: moment(match.utcDate).format('HH:mm:ss'),
                                     gagnant: match.score.winner,
-                                    scoreHomeTeam: match.score.fullTime.homeTeam,
-                                    scoreAwayTeam: match.score.fullTime.awayTeam,
+                                    scoreHomeTeam: scoreHT,
+                                    scoreAwayTeam: scoreAT,
                                     scoreHomeTeamInputUser: 0,
                                     scoreAwayTeamInputUser: 0,
                                     statut: match.status
