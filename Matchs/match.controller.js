@@ -7,7 +7,6 @@ const MatchModel = require('../Models/match.model');
 const collectionMatch = db.collection('matches');
 const moment = require('moment');
 const fetch = require("node-fetch");
-const axios = require("axios");
 //
 
 const apiHeaders = { 'X-Auth-Token': '74a86b94a67541189f94e8266901f6e4' }
@@ -122,11 +121,13 @@ const getMatchs = body => {
 
 const getMatch = body => {
     return new Promise( (resolve, reject ) => {
-        return resolve(axios.get('https://api.football-data.org/v2/matches/' + body._id, { headers: apiHeaders }))
+        // return resolve(axios.get('https://api.football-data.org/v2/matches/' + body._id, { headers: apiHeaders }))
+        resolve(fetch('https://api.football-data.org/v2/matches/' + body._id, {
+            headers: apiHeaders
+        }))
     })
-    .then( data => {
-        return data;
-    })
+    .then(response => { return response.json() })
+    .then( data => { return data.match })
     .catch(err => {
         console.log('Erreur lors de la tentative de la récupération des infos d\'un match : ', err);
     });

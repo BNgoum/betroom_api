@@ -55,7 +55,7 @@ class MatchRouterClass {
         });
 
         // Get one match
-        matchRouter.get('/match', (req, res) => {
+        matchRouter.post('/match', (req, res) => {
 
             // Check for mandatories
             const { miss, extra, ok } = checkFields(['_id'], req.body);
