@@ -21,7 +21,7 @@ const matchSchema = new Schema({
     scoreAwayTeam: Number,
     scoreHomeTeamInputUser: Number,
     scoreAwayTeamInputUser: Number,
-    isFinished: Boolean
+    statut: String
 })
 //
 

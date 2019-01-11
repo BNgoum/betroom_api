@@ -60,7 +60,8 @@ const fetchMatchs = body => {
                                     scoreHomeTeam: element.score.fullTime.homeTeam,
                                     scoreAwayTeam: element.score.fullTime.awayTeam,
                                     scoreHomeTeamInputUser: 0,
-                                    scoreAwayTeamInputUser: 0
+                                    scoreAwayTeamInputUser: 0,
+                                    statut: element.status
                                 })
         
                                 // Save match
