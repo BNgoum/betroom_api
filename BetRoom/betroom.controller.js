@@ -213,8 +213,13 @@ const updateScoreMatch = body => {
                         if ( betroom._id === body.idBetRoom ) {
                             betroom.matchs.map(match => {
                                 if ( match._id === body.idMatch) {
-                                    match.scoreHomeTeam = parseInt(body.scoreHomeTeam);
-                                    match.scoreAwayTeam = parseInt(body.scoreAwayTeam);
+                                    if (body.scoreHomeTeam === null) {
+                                        match.scoreHomeTeam = 0;
+                                        match.scoreAwayTeam = 0;
+                                    } else {
+                                        match.scoreHomeTeam = body.scoreHomeTeam;
+                                        match.scoreAwayTeam = body.scoreAwayTeam;
+                                    }
                                     match.statut = body.status
                                 }
                             })
@@ -225,8 +230,13 @@ const updateScoreMatch = body => {
                         if ( betroom._id === body.idBetRoom ) {
                             betroom.matchs.map(match => {
                                 if ( match._id === body.idMatch) {
-                                    match.scoreHomeTeam = parseInt(body.scoreHomeTeam);
-                                    match.scoreAwayTeam = parseInt(body.scoreAwayTeam);
+                                    if (body.scoreHomeTeam === null) {
+                                        match.scoreHomeTeam = 0;
+                                        match.scoreAwayTeam = 0;
+                                    } else {
+                                        match.scoreHomeTeam = body.scoreHomeTeam;
+                                        match.scoreAwayTeam = body.scoreAwayTeam;
+                                    }
                                     match.statut = body.status
                                 }
                             })
