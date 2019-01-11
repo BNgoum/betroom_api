@@ -151,8 +151,8 @@ const setTeamScore = body => {
     })
 }
 
-    const updateMatch = body => {
-    // Request to set score
+const updateMatch = body => {
+    // Request to set score in input user field
     return new Promise((resolve, reject) => {
         UserModel.findById({ _id: body._id } , (error, success) => {
             if(error) { // Mongo Error
@@ -198,7 +198,58 @@ const setTeamScore = body => {
         })
         
     })
-    }
+}
+
+const updateScoreMatch = body => {
+    // Request to set score real
+    return new Promise((resolve, reject) => {
+        UserModel.findById({ _id: body._id } , (error, success) => {
+            if(error) { // Mongo Error
+                return reject(error)
+            }
+            else {
+                if ( body.typeParticipant === "owner" ) {
+                    success.bet_room.owner.map(betroom => {      
+                        if ( betroom._id === body.idBetRoom ) {
+                            betroom.matchs.map(match => {
+                                if ( match._id === body.idMatch) {
+                                    match.scoreHomeTeam = parseInt(body.scoreHomeTeam);
+                                    match.scoreAwayTeam = parseInt(body.scoreAwayTeam);
+                                    match.statut = body.status
+                                }
+                            })
+                        }
+                    })
+                } else {
+                    success.bet_room.participant.map(betroom => {      
+                        if ( betroom._id === body.idBetRoom ) {
+                            betroom.matchs.map(match => {
+                                if ( match._id === body.idMatch) {
+                                    match.scoreHomeTeam = parseInt(body.scoreHomeTeam);
+                                    match.scoreAwayTeam = parseInt(body.scoreAwayTeam);
+                                    match.statut = body.status
+                                }
+                            })
+                        }
+                    })
+                }
+
+                UserModel.findById({ _id: body._id }, (err, user) => {
+                    if(err) { // Mongo Error
+                        return reject(err)
+                    }
+
+                    user.set({ bet_room: success.bet_room });
+                    user.save(function (err, userUpdated) {
+                        if (err) return handleError(err);
+                        return resolve(userUpdated)
+                    });
+                })
+            }
+        })
+        
+    })
+}
 //
 
 /*
@@ -212,6 +263,7 @@ module.exports = {
     getAllBetRoomOwner,
     getAllBetRoomParticipant,
     setTeamScore,
-    updateMatch
+    updateMatch,
+    updateScoreMatch
 }
 //
