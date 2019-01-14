@@ -55,13 +55,13 @@ class MatchRouterClass {
         });
 
         // Get one match
-        matchRouter.post('/match', (req, res) => {
+        matchRouter.get('/match', (req, res) => {
 
             // Check for mandatories
-            const { miss, extra, ok } = checkFields(['_id'], req.body);
+            // const { miss, extra, ok } = checkFields(['_id'], req.body);
 
             // Check oppropriated values
-            if( !ok ){ sendFieldsError( res, 'Bad fields provided', miss, extra ) }
+            // if( !ok ){ sendFieldsError( res, 'Bad fields provided', miss, extra ) }
 
             // Use controller function
             getMatch(req.body)
