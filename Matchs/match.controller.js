@@ -126,10 +126,10 @@ const getMatchs = body => {
     })
 };
 
-const getMatch = body => {
+const getMatch = id => {
     return new Promise( (resolve, reject ) => {
         // return resolve(axios.get('https://api.football-data.org/v2/matches/' + body._id, { headers: apiHeaders }))
-        resolve(fetch('https://api.football-data.org/v2/matches/' + body._id, {
+        resolve(fetch('https://api.football-data.org/v2/matches/' + id, {
             headers: apiHeaders
         }))
     })

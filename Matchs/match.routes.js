@@ -55,7 +55,7 @@ class MatchRouterClass {
         });
 
         // Get one match
-        matchRouter.get('/match', (req, res) => {
+        matchRouter.get('/match/:id', (req, res) => {
 
             // Check for mandatories
             // const { miss, extra, ok } = checkFields(['_id'], req.body);
@@ -64,7 +64,7 @@ class MatchRouterClass {
             // if( !ok ){ sendFieldsError( res, 'Bad fields provided', miss, extra ) }
 
             // Use controller function
-            getMatch(req.body)
+            getMatch(req.params.id)
             .then( apiRes =>  sendApiSuccessResponse(res, 'Match find', apiRes) )
             .catch( apiErr => sendApiErrorResponse(res, 'Match not find', apiErr) )
         });
