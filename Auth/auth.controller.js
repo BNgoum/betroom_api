@@ -128,6 +128,32 @@ Functions
             })
         })
     };
+
+    // Set field lastCallApi
+    const setLastCallApi = body => {
+        return new Promise( (resolve, reject ) => {
+
+            UserModel.findOneAndUpdate( { _id: body.id }, { lastCallApi: body.date }, (error, user) => {
+                if(error) reject(error)
+                else {
+                    resolve({ user: user })
+                }
+            })
+        })
+    };
+
+    // Get field lastCallApi
+    const getLastCallApi = body => {
+        return new Promise( (resolve, reject ) => {
+
+            UserModel.findOne( { _id: body.id }, (error, user) => {
+                if(error) reject(error)
+                else {
+                    resolve({ user: user.lastCallApi })
+                }
+            })
+        })
+    };
 //
 
 /*
@@ -138,6 +164,8 @@ Export
         login,
         getUser,
         getUserById,
-        getUserByPseudo
+        getUserByPseudo,
+        setLastCallApi,
+        getLastCallApi
     }
 //

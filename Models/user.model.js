@@ -24,7 +24,8 @@ const userSchema = new Schema({
     bet_room: {
         owner: [{ type: Object }],
         participant: [{ type: Object }]
-    }
+    },
+    lastCallApi: Date
 })
 //
 

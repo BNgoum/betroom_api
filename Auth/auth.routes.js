@@ -3,7 +3,7 @@ Imports
 */
     const express = require('express');
     const authRouter = express.Router({ mergeParams: true });
-    const { register, login, getUser, getUserById, getUserByPseudo } = require('./auth.controller');
+    const { register, login, getUser, getUserById, getUserByPseudo, setLastCallApi, getLastCallApi } = require('./auth.controller');
     const mongoose = require('mongoose');
 
     // INNER
@@ -87,6 +87,36 @@ Routes definition
                 login(req.body)
                 .then( apiRes =>  sendApiSuccessResponse(res, 'User login', apiRes) )
                 .catch( apiErr => sendApiErrorResponse(res, 'User not login', apiErr) )
+            });
+
+            // Set lastCallApi
+            authRouter.put('/lastCallApi', (req, res) => {
+
+                // Check for mandatories
+                const { miss, extra, ok } = checkFields(['id', 'date'], req.body);
+
+                // Check oppropriated values
+                if( !ok ){ sendFieldsError( res, 'Bad fields provided', miss, extra ) }
+
+                // Use controller function
+                setLastCallApi(req.body)
+                .then( apiRes =>  sendApiSuccessResponse(res, 'Set last call api done : ', apiRes) )
+                .catch( apiErr => sendApiErrorResponse(res, 'Error when set last call api : ', apiErr) )
+            });
+
+            // Get lastCallApi
+            authRouter.get('/lastCallApi/:id', (req, res) => {
+
+                // // Check for mandatories
+                // const { miss, extra, ok } = checkFields(['id', 'date'], req.body);
+
+                // // Check oppropriated values
+                // if( !ok ){ sendFieldsError( res, 'Bad fields provided', miss, extra ) }
+
+                // Use controller function
+                setLastCallApi(req.params.id)
+                .then( apiRes =>  sendApiSuccessResponse(res, 'Get last call api done : ', apiRes) )
+                .catch( apiErr => sendApiErrorResponse(res, 'Error when get last call api : ', apiErr) )
             });
         };
 
