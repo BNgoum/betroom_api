@@ -114,7 +114,7 @@ Routes definition
                 // if( !ok ){ sendFieldsError( res, 'Bad fields provided', miss, extra ) }
 
                 // Use controller function
-                setLastCallApi(req.params.id)
+                getLastCallApi(req.params.id)
                 .then( apiRes =>  sendApiSuccessResponse(res, 'Get last call api done : ', apiRes) )
                 .catch( apiErr => sendApiErrorResponse(res, 'Error when get last call api : ', apiErr) )
             });

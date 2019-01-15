@@ -145,12 +145,9 @@ Functions
     // Get field lastCallApi
     const getLastCallApi = body => {
         return new Promise( (resolve, reject ) => {
-
-            UserModel.findOne( { _id: body.id }, (error, user) => {
+            UserModel.findOne( { _id: body }, (error, user) => {
                 if(error) reject(error)
-                else {
-                    resolve({ user: user.lastCallApi })
-                }
+                else { resolve({ date: user.lastCallApi }) }
             })
         })
     };
