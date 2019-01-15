@@ -25,7 +25,10 @@ const userSchema = new Schema({
         owner: [{ type: Object }],
         participant: [{ type: Object }]
     },
-    lastCallApi: Date
+    lastCallApi: {
+        type: Date,
+        default: Date.now
+      }
 })
 //
 
