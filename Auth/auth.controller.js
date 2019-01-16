@@ -136,7 +136,7 @@ Functions
             UserModel.findOneAndUpdate( { _id: body.id }, { lastCallApi: body.date }, (error, user) => {
                 if(error) reject(error)
                 else {
-                    resolve({ user: user })
+                    resolve({ date: user.lastCallApi })
                 }
             })
         })

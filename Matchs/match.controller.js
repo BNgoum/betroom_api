@@ -6,6 +6,7 @@ const db = mongoose.connection;
 const MatchModel = require('../Models/match.model');
 const collectionMatch = db.collection('matches');
 const moment = require('moment');
+moment.locale('fr');
 const fetch = require("node-fetch");
 //
 
