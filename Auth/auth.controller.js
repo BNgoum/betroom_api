@@ -3,6 +3,7 @@ Import
 */
     const UserModel = require('../Models/user.model');
     const bcrypt = require('bcryptjs');
+    const apiHeaders = { 'X-Auth-Token': '74a86b94a67541189f94e8266901f6e4' }
 //
 
 /*
@@ -151,6 +152,7 @@ Functions
             })
         })
     };
+
 //
 
 /*
@@ -163,6 +165,6 @@ Export
         getUserById,
         getUserByPseudo,
         setLastCallApi,
-        getLastCallApi
+        getLastCallApi,
     }
 //

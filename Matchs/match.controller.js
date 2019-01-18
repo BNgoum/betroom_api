@@ -8,6 +8,7 @@ const collectionMatch = db.collection('matches');
 const moment = require('moment');
 moment.locale('fr');
 const fetch = require("node-fetch");
+const axios = require('axios');
 //
 
 const apiHeaders = { 'X-Auth-Token': '74a86b94a67541189f94e8266901f6e4' }
@@ -141,12 +142,33 @@ const getMatch = id => {
     });
 };
 
+// Get matches between interval and competitions
+const getMatchesBetweenIntervalAndCompetitions = (competitions, dateFrom, dateTo) => {
+    return new Promise( (resolve, reject ) => {
+        resolve(axios.get('https://api.football-data.org/v2/matches', 
+        { headers: apiHeaders },
+        { params: {
+            competition: competitions,
+            dateFrom: dateFrom,
+            dateTo: dateTo
+        }}
+        ))
+    })
+    .then( data => {
+        return data.data
+    })
+    .catch( error => {
+        console.log('Erreur lors de la récupération des matchs entre un interval et competitions (auth.controller) : ', error)
+    });
+};
+
 /*
 Export
 */
 module.exports = {
     fetchMatchs,
     getMatchs,
-    getMatch
+    getMatch,
+    getMatchesBetweenIntervalAndCompetitions
 }
 //

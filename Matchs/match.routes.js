@@ -3,7 +3,7 @@ Imports
 */
 const express = require('express');
 const matchRouter = express.Router({ mergeParams: true });
-const { fetchMatchs, getMatchs, getMatch } = require('./match.controller');
+const { fetchMatchs, getMatchs, getMatch, getMatchesBetweenIntervalAndCompetitions } = require('./match.controller');
 const mongoose = require('mongoose');
 
 // INNER
@@ -68,7 +68,23 @@ class MatchRouterClass {
             .then( apiRes =>  sendApiSuccessResponse(res, 'Match find', apiRes) )
             .catch( apiErr => sendApiErrorResponse(res, 'Match not find', apiErr) )
         });
+
+        // Get a list of matches between interval and competitions
+        matchRouter.get('/matchesIntervalCompetitions', (req, res) => {
+            // // Check for mandatories
+            // const { miss, extra, ok } = checkFields(['competitions', 'dateFrom', 'dateTo'], req.body);
+
+            // // Check oppropriated values
+            // if( !ok ){ sendFieldsError( res, 'Bad fields provided', miss, extra ) }
+
+            // Use controller function
+            getMatchesBetweenIntervalAndCompetitions(req.query.competitions, req.query.dateFrom,req.query.dateTo)
+            .then( apiRes =>  sendApiSuccessResponse(res, 'List of matches between interval and competitions : ', apiRes) )
+            .catch( apiErr => sendApiErrorResponse(res, 'Error when get List of matches between interval and competitions : ', apiErr) )
+        });
     };
+
+    
 
     init(){
         this.routes();
