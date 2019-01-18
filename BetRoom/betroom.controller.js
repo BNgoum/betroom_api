@@ -210,9 +210,9 @@ const updateScoreMatch = body => {
             else {
                 if ( body.typeParticipant === "owner" ) {
                     success.bet_room.owner.map(betroom => {      
-                        if ( betroom._id === body.idBetRoom ) {
+                        if ( betroom._id == body.idBetRoom ) {
                             betroom.matchs.map(match => {
-                                if ( match._id === body.idMatch) {
+                                if ( match._id == body.idMatch) {
                                     if (body.scoreHomeTeam === null) {
                                         match.scoreHomeTeam = 0;
                                         match.scoreAwayTeam = 0;
@@ -227,9 +227,9 @@ const updateScoreMatch = body => {
                     })
                 } else {
                     success.bet_room.participant.map(betroom => {      
-                        if ( betroom._id === body.idBetRoom ) {
+                        if ( betroom._id == body.idBetRoom ) {
                             betroom.matchs.map(match => {
-                                if ( match._id === body.idMatch) {
+                                if ( match._id == body.idMatch) {
                                     if (body.scoreHomeTeam === null) {
                                         match.scoreHomeTeam = 0;
                                         match.scoreAwayTeam = 0;
