@@ -141,6 +141,26 @@ const getMatch = id => {
     });
 };
 
+// Get matches between interval and competitions
+const getMatchesBetweenIntervalAndCompetitions = (competitions, dateFrom, dateTo) => {
+    return new Promise( (resolve, reject ) => {
+        resolve(axios.get('https://api.football-data.org/v2/matches', 
+        { headers: apiHeaders },
+        { params: {
+            competition: competitions,
+            dateFrom: dateFrom,
+            dateTo: dateTo
+        }}
+        ))
+    })
+    .then( data => {
+        return data.data
+    })
+    .catch( error => {
+        console.log('Erreur lors de la récupération des matchs entre un interval et competitions (auth.controller) : ', error)
+    });
+};
+
 /*
 Export
 */
