@@ -196,7 +196,6 @@ const updateMatch = body => {
                 })
             }
         })
-        
     })
 }
 
@@ -220,7 +219,8 @@ const updateScoreMatch = body => {
                                         match.scoreHomeTeam = body.scoreHomeTeam;
                                         match.scoreAwayTeam = body.scoreAwayTeam;
                                     }
-                                    match.statut = body.status
+                                    match.statut = body.status;
+                                    match.gagnant = body.gagnant;
                                 }
                             })
                         }
@@ -237,7 +237,8 @@ const updateScoreMatch = body => {
                                         match.scoreHomeTeam = body.scoreHomeTeam;
                                         match.scoreAwayTeam = body.scoreAwayTeam;
                                     }
-                                    match.statut = body.status
+                                    match.statut = body.status;
+                                    match.gagnant = body.gagnant;
                                 }
                             })
                         }
@@ -257,7 +258,6 @@ const updateScoreMatch = body => {
                 })
             }
         })
-        
     })
 }
 //

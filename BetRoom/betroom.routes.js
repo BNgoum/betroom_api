@@ -130,7 +130,7 @@ class BetRoomRouterClass {
         // Updated match
         BetRoomRouter.put('/put/matchUpdated', (req, res) => {
             // Check for mandatories
-            const { miss, extra, ok } = checkFields(['_id', 'typeParticipant', 'idBetRoom', 'idMatch', 'scoreHomeTeam', 'scoreAwayTeam', 'status'], req.body);
+            const { miss, extra, ok } = checkFields(['_id', 'typeParticipant', 'idBetRoom', 'idMatch', 'scoreHomeTeam', 'scoreAwayTeam', 'status', 'gagnant'], req.body);
 
             // Check oppropriated values
             if( !ok ){ sendFieldsError( res, 'Bad fields provided', miss, extra ) }
