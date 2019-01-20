@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const db = mongoose.connection;
 const MatchModel = require('../Models/match.model');
 const collectionMatch = db.collection('matches');
-const moment = require('moment-timezone');
+const moment = require('moment');
 moment.locale('fr');
 const fetch = require("node-fetch");
 const axios = require('axios');
@@ -63,8 +63,8 @@ const fetchMatchs = body => {
                                     homeTeam: match.homeTeam.name,
                                     awayTeam: match.awayTeam.name,
                                     dateHeureMatch: match.utcDate,
-                                    dateMatch: moment(match.utcDate).tz("Europe/Paris").format('DD-MM-YYYY'),
-                                    heureMatch: moment(match.utcDate).tz("Europe/Paris").format('HH:mm'),
+                                    dateMatch: moment(match.utcDate).format('DD-MM-YYYY'),
+                                    heureMatch: moment(match.utcDate).add(1, 'hours').format('HH:mm'),
                                     gagnant: match.score.winner,
                                     scoreHomeTeam: scoreHT,
                                     scoreAwayTeam: scoreAT,
