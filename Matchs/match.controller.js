@@ -70,7 +70,8 @@ const fetchMatchs = body => {
                                     scoreAwayTeam: scoreAT,
                                     scoreHomeTeamInputUser: 0,
                                     scoreAwayTeamInputUser: 0,
-                                    statut: match.status
+                                    statut: match.status,
+                                    point: 0
                                 })
         
                                 // Save match

@@ -21,7 +21,8 @@ const matchSchema = new Schema({
     scoreAwayTeam: Number,
     scoreHomeTeamInputUser: Number,
     scoreAwayTeamInputUser: Number,
-    statut: String
+    statut: String,
+    points: Number
 })
 //
 
