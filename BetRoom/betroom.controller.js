@@ -208,11 +208,11 @@ const updateScoreMatch = body => {
             }
             else {
                 if ( body.typeParticipant === "owner" ) {
-                    success.bet_room.owner.map(betroom => {      
+                    success.bet_room.owner.map(betroom => {     
                         if ( betroom._id == body.idBetRoom ) {
                             betroom.matchs.map(match => {
                                 if ( match._id == body.idMatch) {
-                                    if (body.scoreHomeTeam === null) {
+                                    if (body.scoreHomeTeam == null) {
                                         match.scoreHomeTeam = 0;
                                         match.scoreAwayTeam = 0;
                                     } else {
@@ -221,6 +221,16 @@ const updateScoreMatch = body => {
                                     }
                                     match.statut = body.status;
                                     match.gagnant = body.gagnant;
+
+                                    UserModel.findByIdAndUpdate({ _id: body._id },{ bet_room: success.bet_room }, (err, user) => {
+                                        if(err) { // Mongo Error
+                                            return reject(err)
+                                        }
+                    
+                                        if(user) {
+                                            resolve(success.bet_room)
+                                        }
+                                    })
                                 }
                             })
                         }
@@ -230,7 +240,7 @@ const updateScoreMatch = body => {
                         if ( betroom._id == body.idBetRoom ) {
                             betroom.matchs.map(match => {
                                 if ( match._id == body.idMatch) {
-                                    if (body.scoreHomeTeam === null) {
+                                    if (body.scoreHomeTeam == null) {
                                         match.scoreHomeTeam = 0;
                                         match.scoreAwayTeam = 0;
                                     } else {
@@ -239,23 +249,21 @@ const updateScoreMatch = body => {
                                     }
                                     match.statut = body.status;
                                     match.gagnant = body.gagnant;
+
+                                    UserModel.findByIdAndUpdate({ _id: body._id },{ bet_room: success.bet_room }, (err, user) => {
+                                        if(err) { // Mongo Error
+                                            return reject(err)
+                                        }
+                    
+                                        if(user) {
+                                            resolve(success.bet_room)
+                                        }
+                                    })
                                 }
                             })
                         }
                     })
                 }
-
-                UserModel.findById({ _id: body._id }, (err, user) => {
-                    if(err) { // Mongo Error
-                        return reject(err)
-                    }
-
-                    user.set({ bet_room: success.bet_room });
-                    user.save(function (err, userUpdated) {
-                        if (err) return handleError(err);
-                        return resolve(userUpdated)
-                    });
-                })
             }
         })
     })
