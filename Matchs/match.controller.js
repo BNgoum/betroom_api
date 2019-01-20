@@ -114,7 +114,7 @@ const getMatchs = body => {
                 for (let ite in momentDates) {
                     for (let a in matchs) {
                         let concatDateHeureMatch = matchs[a].dateMatch + ' ' + matchs[a].heureMatch;
-                        if (momentDates[ite].format('DD-MM-YYYY HH:mm') == concatDateHeureMatch && !arrayMatchsSort.includes(matchs[a])) {
+                        if (momentDates[ite].format('DD-MM-YYYY HH:mm:ss') == concatDateHeureMatch && !arrayMatchsSort.includes(matchs[a])) {
                             arrayMatchsSort.push(matchs[a]);
                         }
                     }
