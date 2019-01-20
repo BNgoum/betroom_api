@@ -64,7 +64,7 @@ const fetchMatchs = body => {
                                     awayTeam: match.awayTeam.name,
                                     dateHeureMatch: match.utcDate,
                                     dateMatch: moment(match.utcDate).format('DD-MM-YYYY'),
-                                    heureMatch: moment(match.utcDate).format('HH:mm'),
+                                    heureMatch: moment(match.utcDate).format('HH:mm:ss'),
                                     gagnant: match.score.winner,
                                     scoreHomeTeam: scoreHT,
                                     scoreAwayTeam: scoreAT,
