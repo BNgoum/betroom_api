@@ -3,7 +3,7 @@ Imports
 */
 const express = require('express');
 const matchRouter = express.Router({ mergeParams: true });
-const { getMatchs, getMatch, getMatchesBetweenIntervalAndCompetitions } = require('./match.controller');
+const { getMatchs, getMatch, getAllMatchs } = require('./match.controller');
 const mongoose = require('mongoose');
 
 // INNER
@@ -53,6 +53,21 @@ class MatchRouterClass {
             .then( apiRes =>  sendApiSuccessResponse(res, 'Matchs of championnat find', apiRes) )
             .catch( apiErr => sendApiErrorResponse(res, 'Matchs of championnat not find', apiErr) )
         });
+        
+        // Get all matchs of championnats
+        matchRouter.get('/matchs', (req, res) => {
+
+            // Check for mandatories
+            //const { miss, extra, ok } = checkFields(['championnat'], req.body);
+
+            // Check oppropriated values
+            //if( !ok ){ sendFieldsError( res, 'Bad fields provided', miss, extra ) }
+
+            // Use controller function
+            getAllMatchs()
+            .then( apiRes =>  sendApiSuccessResponse(res, 'Matchs of championnat find', apiRes) )
+            .catch( apiErr => sendApiErrorResponse(res, 'Matchs of championnat not find', apiErr) )
+        });
 
         // Get one match
         matchRouter.get('/match/:id', (req, res) => {
@@ -70,18 +85,18 @@ class MatchRouterClass {
         });
 
         // Get a list of matches between interval and competitions
-        matchRouter.get('/matchesIntervalCompetitions', (req, res) => {
-            // // Check for mandatories
-            // const { miss, extra, ok } = checkFields(['competitions', 'dateFrom', 'dateTo'], req.body);
+        // matchRouter.get('/matchesIntervalCompetitions', (req, res) => {
+        //     // // Check for mandatories
+        //     // const { miss, extra, ok } = checkFields(['competitions', 'dateFrom', 'dateTo'], req.body);
 
-            // // Check oppropriated values
-            // if( !ok ){ sendFieldsError( res, 'Bad fields provided', miss, extra ) }
+        //     // // Check oppropriated values
+        //     // if( !ok ){ sendFieldsError( res, 'Bad fields provided', miss, extra ) }
 
-            // Use controller function
-            getMatchesBetweenIntervalAndCompetitions(req.query.competitions, req.query.dateFrom,req.query.dateTo)
-            .then( apiRes =>  sendApiSuccessResponse(res, 'List of matches between interval and competitions : ', apiRes) )
-            .catch( apiErr => sendApiErrorResponse(res, 'Error when get List of matches between interval and competitions : ', apiErr) )
-        });
+        //     // Use controller function
+        //     getMatchesBetweenIntervalAndCompetitions(req.query.competitions, req.query.dateFrom,req.query.dateTo)
+        //     .then( apiRes =>  sendApiSuccessResponse(res, 'List of matches between interval and competitions : ', apiRes) )
+        //     .catch( apiErr => sendApiErrorResponse(res, 'Error when get List of matches between interval and competitions : ', apiErr) )
+        // });
     };
 
     
