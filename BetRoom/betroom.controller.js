@@ -221,16 +221,6 @@ const updateScoreMatch = body => {
                                     }
                                     match.statut = body.status;
                                     match.gagnant = body.gagnant;
-
-                                    UserModel.findByIdAndUpdate({ _id: body._id },{ bet_room: success.bet_room }, (err, user) => {
-                                        if(err) { // Mongo Error
-                                            return reject(err)
-                                        }
-                    
-                                        if(user) {
-                                            resolve(success.bet_room)
-                                        }
-                                    })
                                 }
                             })
                         }
@@ -249,21 +239,21 @@ const updateScoreMatch = body => {
                                     }
                                     match.statut = body.status;
                                     match.gagnant = body.gagnant;
-
-                                    UserModel.findByIdAndUpdate({ _id: body._id },{ bet_room: success.bet_room }, (err, user) => {
-                                        if(err) { // Mongo Error
-                                            return reject(err)
-                                        }
-                    
-                                        if(user) {
-                                            resolve(success.bet_room)
-                                        }
-                                    })
                                 }
                             })
                         }
                     })
                 }
+                
+                UserModel.findByIdAndUpdate({ _id: body._id },{ bet_room: success.bet_room }, (err, user) => {
+                    if(err) { // Mongo Error
+                        return reject(err)
+                    }
+
+                    if(user) {
+                        resolve(success.bet_room)
+                    }
+                })
             }
         })
     })
