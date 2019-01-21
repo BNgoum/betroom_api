@@ -1,6 +1,8 @@
 const express = require('express');
 require('dotenv').config();
 const port = process.env.PORT;
+const moment = require('moment');
+const fetch = require("node-fetch");
 
 // Import des routes
 const AuthRouterClass = require('./Auth/auth.routes');
@@ -24,6 +26,7 @@ db.on('error', console.error.bind(console, 'Erreur lors de la connexion'));
 db.once('open', function() {
     console.log('Connexion à la BDD OK.');
 })
+const collectionMatch = db.collection('matches');
 
 const app = express();
 
@@ -40,6 +43,73 @@ app.use('/api/match', matchRouter.init());
 app.use('/api/auth', authRouter.init());
 app.use('/api/friends', friendsRouter.init());
 app.use('/api/betroom', betRoomRouter.init());
+
+const apiHeaders = { 'X-Auth-Token': '74a86b94a67541189f94e8266901f6e4' }
+const championnats = ["2015", "2021", "2002", "2019", "2014", "2001"];
+const now = moment().format('YYYY-MM-DD');
+const nextWeek = moment().add(7, 'd').format('YYYY-MM-DD');
+const MatchModel = require('./Models/match.model');
+
+updateMatches = () => {
+    console.log('One call to updateMatches ! \n\n');
+    return new Promise((resolve, reject) => {
+        collectionMatch.deleteMany({}, (error) => {
+            if(error){ // Mongo Error
+                return reject(error)
+            } else {
+                fetch('https://api.football-data.org/v2/matches?competitions=' + championnats + '&dateFrom=' + now + '&dateTo=' + nextWeek, {
+                    headers: apiHeaders
+                })
+                .then(response => {
+                    return response.json();
+                })
+                .then(data => {
+                    data.matches.forEach(function(match) {
+                        let scoreHT = 0;
+                        let scoreAT = 0;
+                        if (match.score.fullTime.homeTeam !== null) {
+                            scoreHT = match.score.fullTime.homeTeam;
+                            scoreAT = match.score.fullTime.awayTeam;
+                        }
+
+                        let newMatch = new MatchModel({
+                            _id: match.id,
+                            championnat: match.competition.name,
+                            homeTeam: match.homeTeam.name,
+                            awayTeam: match.awayTeam.name,
+                            dateHeureMatch: match.utcDate,
+                            dateMatch: moment(match.utcDate).format('DD-MM-YYYY'),
+                            heureMatch: moment(match.utcDate).format('HH:mm'),
+                            gagnant: match.score.winner,
+                            scoreHomeTeam: scoreHT,
+                            scoreAwayTeam: scoreAT,
+                            scoreHomeTeamInputUser: 0,
+                            scoreAwayTeamInputUser: 0,
+                            statut: match.status,
+                            points: 0
+                        })
+
+                        // Save match
+                        MatchModel.create(newMatch, (error, newMatch) => {
+                            if(error){ // Mongo error
+                                return reject(error)
+                            }
+                            else{ // Match registrated
+                                return resolve(newMatch);
+                            };
+                        });
+                    })
+                })
+                .catch( error => {
+                    console.log('Erreur lors de l\'ajout des matchs (server.js) : ', error)
+                    return reject(error);
+                });
+            }
+        })
+    })
+}
+
+setInterval(updateMatches, 30000);
 
 app.listen(port, () => {
     console.log(`Listen on http://localhost:${port}`);

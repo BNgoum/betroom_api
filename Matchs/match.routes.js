@@ -3,7 +3,7 @@ Imports
 */
 const express = require('express');
 const matchRouter = express.Router({ mergeParams: true });
-const { fetchMatchs, getMatchs, getMatch, getMatchesBetweenIntervalAndCompetitions } = require('./match.controller');
+const { getMatchs, getMatch, getMatchesBetweenIntervalAndCompetitions } = require('./match.controller');
 const mongoose = require('mongoose');
 
 // INNER
@@ -25,31 +25,31 @@ class MatchRouterClass {
         });
         
         // fetchMatchs
-        matchRouter.post('/matchs', (req, res) => {
+        // matchRouter.post('/matchs', (req, res) => {
 
-            // Check for mandatories
-            const { miss, extra, ok } = checkFields(['dateFrom', 'dateTo'], req.body);
+        //     // Check for mandatories
+        //     const { miss, extra, ok } = checkFields(['dateFrom', 'dateTo'], req.body);
 
-            // Check oppropriated values
-            if( !ok ){ sendFieldsError( res, 'Bad fields provided', miss, extra ) }
+        //     // Check oppropriated values
+        //     if( !ok ){ sendFieldsError( res, 'Bad fields provided', miss, extra ) }
 
-            // Use controller function
-            fetchMatchs(req.body)
-            .then( apiRes =>  sendApiSuccessResponse(res, 'Matchs add', apiRes) )
-            .catch( apiErr => sendApiErrorResponse(res, 'Matchs error add', apiErr) )
-        });
+        //     // Use controller function
+        //     fetchMatchs(req.body)
+        //     .then( apiRes =>  sendApiSuccessResponse(res, 'Matchs add', apiRes) )
+        //     .catch( apiErr => sendApiErrorResponse(res, 'Matchs error add', apiErr) )
+        // });
 
         // Get Match of championnats
-        matchRouter.post('/matchsChampionnat', (req, res) => {
+        matchRouter.get('/matchsChampionnat/:id', (req, res) => {
 
             // Check for mandatories
-            const { miss, extra, ok } = checkFields(['championnat'], req.body);
+            //const { miss, extra, ok } = checkFields(['championnat'], req.body);
 
             // Check oppropriated values
-            if( !ok ){ sendFieldsError( res, 'Bad fields provided', miss, extra ) }
+            //if( !ok ){ sendFieldsError( res, 'Bad fields provided', miss, extra ) }
 
             // Use controller function
-            getMatchs(req.body)
+            getMatchs(req.params.id)
             .then( apiRes =>  sendApiSuccessResponse(res, 'Matchs of championnat find', apiRes) )
             .catch( apiErr => sendApiErrorResponse(res, 'Matchs of championnat not find', apiErr) )
         });

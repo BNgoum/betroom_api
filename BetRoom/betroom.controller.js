@@ -268,6 +268,56 @@ const updateScoreMatch = body => {
         })
     })
 }
+
+const updatePoints = body => {
+    // Request to set score real
+    return new Promise((resolve, reject) => {
+        UserModel.findById({ _id: body._id } , (error, success) => {
+            if(error) { // Mongo Error
+                return reject(error)
+            }
+            else {
+                if ( body.typeParticipant === "owner" ) {
+                    success.bet_room.owner.map(betroom => {     
+                        if ( betroom._id == body.idBetRoom ) {
+                            betroom.matchs.map(match => {
+                                if ( match._id == body.idMatch) {
+                                    match.points = body.points;
+
+                                    UserModel.findByIdAndUpdate({ _id: body._id },{ bet_room: success.bet_room }, (err, user) => {
+                                        if(err) { // Mongo Error
+                                            return reject(err)
+                                        }
+                    
+                                        if(user) { resolve(success.bet_room) }
+                                    })
+                                }
+                            })
+                        }
+                    })
+                } else {
+                    success.bet_room.participant.map(betroom => {      
+                        if ( betroom._id == body.idBetRoom ) {
+                            betroom.matchs.map(match => {
+                                if ( match._id == body.idMatch) {
+                                    match.points = body.points;
+
+                                    UserModel.findByIdAndUpdate({ _id: body._id },{ bet_room: success.bet_room }, (err, user) => {
+                                        if(err) { // Mongo Error
+                                            return reject(err)
+                                        }
+                    
+                                        if(user) { resolve(success.bet_room) }
+                                    })
+                                }
+                            })
+                        }
+                    })
+                }
+            }
+        })
+    })
+}
 //
 
 /*
@@ -282,6 +332,7 @@ module.exports = {
     getAllBetRoomParticipant,
     setTeamScore,
     updateMatch,
-    updateScoreMatch
+    updateScoreMatch,
+    updatePoints
 }
 //

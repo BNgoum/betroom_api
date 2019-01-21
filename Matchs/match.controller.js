@@ -29,103 +29,85 @@ sortByDateAsc = function (lhs, rhs) {
     return lhs > rhs ? 1 : lhs < rhs ? -1 : 0;
 }
 
-const fetchMatchs = body => {
-    // Search for user
-    return new Promise( (resolve, reject) => {
+// const fetchMatchs = body => {
+//     // Search for user
+//     return new Promise( (resolve, reject) => {
 
-        // On supprime les tous les documents de la collection matchs de la semaine
-        collectionMatch.deleteMany({}, (error) => {
-            if(error){ // Mongo Error
-                return reject(error)
-            } else {
-                for (const i in championnats) {
-                    if (championnats.hasOwnProperty(i)) {
-                        const championnat = championnats[i];
+//         // On supprime les tous les documents de la collection matchs de la semaine
+//         collectionMatch.deleteMany({}, (error) => {
+//             if(error){ // Mongo Error
+//                 return reject(error)
+//             } else {
+//                 for (const i in championnats) {
+//                     if (championnats.hasOwnProperty(i)) {
+//                         const championnat = championnats[i];
                         
-                        fetch('https://api.football-data.org/v2/competitions/' + championnat + '/matches?dateFrom=' + body.dateFrom + '&dateTo=' + body.dateTo, {
-                            headers: apiHeaders
-                        })
-                        .then(response => {
-                            return response.json();
-                        })
-                        .then(data => {
-                            data.matches.forEach(function(match) {
-                                let scoreHT = 0;
-                                let scoreAT = 0;
-                                if (match.score.fullTime.homeTeam !== null) {
-                                    scoreHT = match.score.fullTime.homeTeam;
-                                    scoreAT = match.score.fullTime.awayTeam;
-                                }
+//                         fetch('https://api.football-data.org/v2/competitions/' + championnat + '/matches?dateFrom=' + body.dateFrom + '&dateTo=' + body.dateTo, {
+//                             headers: apiHeaders
+//                         })
+//                         .then(response => {
+//                             return response.json();
+//                         })
+//                         .then(data => {
+//                             data.matches.forEach(function(match) {
+//                                 let scoreHT = 0;
+//                                 let scoreAT = 0;
+//                                 if (match.score.fullTime.homeTeam !== null) {
+//                                     scoreHT = match.score.fullTime.homeTeam;
+//                                     scoreAT = match.score.fullTime.awayTeam;
+//                                 }
 
-                                let newMatch = new MatchModel({
-                                    _id: match.id,
-                                    championnat: i,
-                                    homeTeam: match.homeTeam.name,
-                                    awayTeam: match.awayTeam.name,
-                                    dateHeureMatch: match.utcDate,
-                                    dateMatch: moment(match.utcDate).format('DD-MM-YYYY'),
-                                    heureMatch: moment(match.utcDate).format('HH:mm:ss'),
-                                    gagnant: match.score.winner,
-                                    scoreHomeTeam: scoreHT,
-                                    scoreAwayTeam: scoreAT,
-                                    scoreHomeTeamInputUser: 0,
-                                    scoreAwayTeamInputUser: 0,
-                                    statut: match.status,
-                                    points: 0
-                                })
+//                                 let newMatch = new MatchModel({
+//                                     _id: match.id,
+//                                     championnat: i,
+//                                     homeTeam: match.homeTeam.name,
+//                                     awayTeam: match.awayTeam.name,
+//                                     dateHeureMatch: match.utcDate,
+//                                     dateMatch: moment(match.utcDate).format('DD-MM-YYYY'),
+//                                     heureMatch: moment(match.utcDate).format('HH:mm:ss'),
+//                                     gagnant: match.score.winner,
+//                                     scoreHomeTeam: scoreHT,
+//                                     scoreAwayTeam: scoreAT,
+//                                     scoreHomeTeamInputUser: 0,
+//                                     scoreAwayTeamInputUser: 0,
+//                                     statut: match.status,
+//                                     points: 0
+//                                 })
         
-                                // Save match
-                                MatchModel.create(newMatch, (error, newMatch) => {
-                                    if(error){ // Mongo error
-                                        return reject(error)
-                                    }
-                                    else{ // Match registrated
-                                        return resolve(newMatch);
-                                    };
-                                });
-                            })
-                        })
-                        .catch( error => {
-                            console.log('Erreur lors de l\'ajout des matchs (match.controller) : ', error)
-                            return reject(error);
-                        });
-                    }
-                }
-            }
-        });
-    });
-};
+//                                 // Save match
+//                                 MatchModel.create(newMatch, (error, newMatch) => {
+//                                     if(error){ // Mongo error
+//                                         return reject(error)
+//                                     }
+//                                     else{ // Match registrated
+//                                         return resolve(newMatch);
+//                                     };
+//                                 });
+//                             })
+//                         })
+//                         .catch( error => {
+//                             console.log('Erreur lors de l\'ajout des matchs (match.controller) : ', error)
+//                             return reject(error);
+//                         });
+//                     }
+//                 }
+//             }
+//         });
+//     });
+// };
 
-const getMatchs = body => {
+const getMatchs = id => {
     return new Promise( (resolve, reject ) => {
-
-        MatchModel.find( { championnat : body.championnat }, (error, matchs) => {
+        MatchModel.find({ championnat: id}, (error, matchs) => {
+            //console.log('Matchs : ', matchs)
+        
             if(error) reject(error)
             else if( !matchs ) reject('Championnat not found')
             else {
-                let momentDates = [];
-                let arrayMatchsSort = [];
-
-                for (let i in matchs) {
-                    momentDates.push(moment(matchs[i].dateHeureMatch));
-                }
-
-                momentDates.sort(sortByDateAsc);
-
-                for (let ite in momentDates) {
-                    for (let a in matchs) {
-                        let concatDateHeureMatch = matchs[a].dateMatch + ' ' + matchs[a].heureMatch;
-                        if (momentDates[ite].format('DD-MM-YYYY HH:mm:ss') == concatDateHeureMatch && !arrayMatchsSort.includes(matchs[a])) {
-                            arrayMatchsSort.push(matchs[a]);
-                        }
-                    }
-                }
-
-                resolve({
-                    matchs: arrayMatchsSort
-                })
+                return resolve({matchs: matchs});
             }
         })
+        
     })
 };
 
@@ -166,7 +148,6 @@ const getMatchesBetweenIntervalAndCompetitions = (competitions, dateFrom, dateTo
 Export
 */
 module.exports = {
-    fetchMatchs,
     getMatchs,
     getMatch,
     getMatchesBetweenIntervalAndCompetitions
