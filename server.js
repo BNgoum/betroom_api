@@ -51,27 +51,33 @@ const nextWeek = moment().add(7, 'd').format('YYYY-MM-DD');
 const MatchModel = require('./Models/match.model');
 
 updateMatches = () => {
-    return new Promise((resolve, reject) => {
-        collectionMatch.deleteMany({}, (error) => {
-            if(error){ // Mongo Error
-                return reject(error)
-            } else {
-                fetch('https://api.football-data.org/v2/matches?competitions=' + championnats + '&dateFrom=' + now + '&dateTo=' + nextWeek, {
-                    headers: apiHeaders
-                })
-                .then(response => {
-                    return response.json();
-                })
-                .then(data => {
-                    data.matches.forEach(function(match) {
-                        let scoreHT = 0;
-                        let scoreAT = 0;
+    fetch('https://api.football-data.org/v2/matches?competitions=' + championnats + '&dateFrom=' + now + '&dateTo=' + nextWeek, {
+        headers: apiHeaders
+    })
+    .then(response => {
+        return response.json();
+    })
+    .then(data => {
+        data.matches.forEach((match) => {
+            let update = {
+                homeTeam: match.homeTeam.name,
+                awayTeam: match.awayTeam.name,
+                gagnant: match.score.winner,
+                scoreHomeTeam: scoreHT,
+                scoreAwayTeam: scoreAT,
+                statut: match.status,
+            }
+            MatchModel.findOneAndUpdate({_id: match._id}, update, { upsert: true }, (error, result) => {
+                if (!error) {
+                    if (!result) {
+                        let scoreHT, scoreAT = 0;
+
                         if (match.score.fullTime.homeTeam !== null) {
                             scoreHT = match.score.fullTime.homeTeam;
                             scoreAT = match.score.fullTime.awayTeam;
                         }
-
-                        let newMatch = new MatchModel({
+            
+                        result = new MatchModel({
                             _id: match.id,
                             championnat: match.competition.name,
                             homeTeam: match.homeTeam.name,
@@ -82,31 +88,84 @@ updateMatches = () => {
                             gagnant: match.score.winner,
                             scoreHomeTeam: scoreHT,
                             scoreAwayTeam: scoreAT,
-                            scoreHomeTeamInputUser: 0,
-                            scoreAwayTeamInputUser: 0,
                             statut: match.status,
-                            points: 0
                         })
-
-                        // Save match
-                        MatchModel.create(newMatch, (error, newMatch) => {
-                            if(error){ // Mongo error
-                                return reject(error)
-                            }
-                            else{ // Match registrated
-                                return resolve(newMatch);
-                            };
-                        });
-                    })
-                })
-                .catch( error => {
-                    console.log('Erreur lors de l\'ajout des matchs (server.js) : ', error)
-                    return reject(error);
-                });
-            }
+                    }
+                    // Save the document
+                    result.save(function(error) {
+                        if (!error) {
+                            // Do something with the document
+                        } else {
+                            throw error;
+                        }
+                    });
+                }
+            })
         })
     })
-}
+    .catch( error => {
+        console.log('Erreur lors de l\'ajout des matchs (server.js) : ', error)
+        return reject(error);
+    });
+}        
+
+// updateMatches = () => {
+//     return new Promise((resolve, reject) => {
+//         collectionMatch.deleteMany({}, (error) => {
+//             if(error){ // Mongo Error
+//                 return reject(error)
+//             } else {
+//                 fetch('https://api.football-data.org/v2/matches?competitions=' + championnats + '&dateFrom=' + now + '&dateTo=' + nextWeek, {
+//                     headers: apiHeaders
+//                 })
+//                 .then(response => {
+//                     return response.json();
+//                 })
+//                 .then(data => {
+//                     data.matches.forEach(function(match) {
+//                         let scoreHT = 0;
+//                         let scoreAT = 0;
+//                         if (match.score.fullTime.homeTeam !== null) {
+//                             scoreHT = match.score.fullTime.homeTeam;
+//                             scoreAT = match.score.fullTime.awayTeam;
+//                         }
+
+//                         let newMatch = new MatchModel({
+//                             _id: match.id,
+//                             championnat: match.competition.name,
+//                             homeTeam: match.homeTeam.name,
+//                             awayTeam: match.awayTeam.name,
+//                             dateHeureMatch: match.utcDate,
+//                             dateMatch: moment(match.utcDate).format('DD-MM-YYYY'),
+//                             heureMatch: moment(match.utcDate).format('HH:mm'),
+//                             gagnant: match.score.winner,
+//                             scoreHomeTeam: scoreHT,
+//                             scoreAwayTeam: scoreAT,
+//                             scoreHomeTeamInputUser: 0,
+//                             scoreAwayTeamInputUser: 0,
+//                             statut: match.status,
+//                             points: 0
+//                         })
+
+//                         // Save match
+//                         MatchModel.create(newMatch, (error, newMatch) => {
+//                             if(error){ // Mongo error
+//                                 return reject(error)
+//                             }
+//                             else{ // Match registrated
+//                                 return resolve(newMatch);
+//                             };
+//                         });
+//                     })
+//                 })
+//                 .catch( error => {
+//                     console.log('Erreur lors de l\'ajout des matchs (server.js) : ', error)
+//                     return reject(error);
+//                 });
+//             }
+//         })
+//     })
+// }
 
 setInterval(updateMatches, 30000);
 

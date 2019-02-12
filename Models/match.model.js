@@ -17,12 +17,12 @@ const matchSchema = new Schema({
     dateMatch: String,
     heureMatch: String,
     gagnant: String,
-    scoreHomeTeam: Number,
-    scoreAwayTeam: Number,
-    scoreHomeTeamInputUser: Number,
-    scoreAwayTeamInputUser: Number,
+    scoreHomeTeam: {type: Number, default: 0},
+    scoreAwayTeam: {type: Number, default: 0},
+    scoreHomeTeamInputUser: {type: Number, default: 0},
+    scoreAwayTeamInputUser: {type: Number, default: 0},
     statut: String,
-    points: Number
+    points: {type: Number, default: 0}
 })
 //
 
