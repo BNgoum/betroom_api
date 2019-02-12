@@ -244,7 +244,7 @@ const updateScoreMatch = body => {
                         }
                     })
                 }
-                
+
                 UserModel.findByIdAndUpdate({ _id: body._id },{ bet_room: success.bet_room }, (err, user) => {
                     if(err) { // Mongo Error
                         return reject(err)
@@ -271,17 +271,7 @@ const updatePoints = body => {
                     success.bet_room.owner.map(betroom => {     
                         if ( betroom._id == body.idBetRoom ) {
                             betroom.matchs.map(match => {
-                                if ( match._id == body.idMatch) {
-                                    match.points = body.points;
-
-                                    UserModel.findByIdAndUpdate({ _id: body._id },{ bet_room: success.bet_room }, (err, user) => {
-                                        if(err) { // Mongo Error
-                                            return reject(err)
-                                        }
-                    
-                                        if(user) { resolve(success.bet_room) }
-                                    })
-                                }
+                                if ( match._id == body.idMatch) { match.points = body.points }
                             })
                         }
                     })
@@ -289,21 +279,19 @@ const updatePoints = body => {
                     success.bet_room.participant.map(betroom => {      
                         if ( betroom._id == body.idBetRoom ) {
                             betroom.matchs.map(match => {
-                                if ( match._id == body.idMatch) {
-                                    match.points = body.points;
-
-                                    UserModel.findByIdAndUpdate({ _id: body._id },{ bet_room: success.bet_room }, (err, user) => {
-                                        if(err) { // Mongo Error
-                                            return reject(err)
-                                        }
-                    
-                                        if(user) { resolve(success.bet_room) }
-                                    })
-                                }
+                                if ( match._id == body.idMatch) { match.points = body.points }
                             })
                         }
                     })
                 }
+
+                UserModel.findByIdAndUpdate({ _id: body._id },{ bet_room: success.bet_room }, (err, user) => {
+                    if(err) { // Mongo Error
+                        return reject(err)
+                    }
+
+                    if(user) { resolve(success.bet_room) }
+                })
             }
         })
     })

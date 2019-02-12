@@ -51,7 +51,6 @@ const nextWeek = moment().add(7, 'd').format('YYYY-MM-DD');
 const MatchModel = require('./Models/match.model');
 
 updateMatches = () => {
-    console.log('One call to updateMatches ! \n\n');
     return new Promise((resolve, reject) => {
         collectionMatch.deleteMany({}, (error) => {
             if(error){ // Mongo Error

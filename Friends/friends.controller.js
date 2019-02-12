@@ -105,6 +105,19 @@ const accepted = body => {
         })
     })
 };
+
+const getAllFriends = body => {
+    return new Promise( (resolve, reject ) => {
+
+        UserModel.findOne( { _id: body._id }, (error, user) => {
+            if(error) reject(error)
+            else if( !user ) reject('User not found')
+            else {
+                resolve({ user: user.friends.accepted })
+            }
+        })
+    })
+};
 //
 
 /*
@@ -112,6 +125,7 @@ Export
 */
 module.exports = {
     request,
-    accepted
+    accepted,
+    getAllFriends
 }
 //

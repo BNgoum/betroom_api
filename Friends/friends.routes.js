@@ -3,7 +3,7 @@ Imports
 */
 const express = require('express');
 const friendsRouter = express.Router({ mergeParams: true });
-const { request, accepted, getFriends } = require('./friends.controller');
+const { request, accepted, getAllFriends } = require('./friends.controller');
 const mongoose = require('mongoose');
 
 // INNER
@@ -46,7 +46,7 @@ class FriendsRouterClass {
         });
 
         // Get friends
-        friendsRouter.post('/allFriends', (req, res) => {
+        friendsRouter.post('/getAllFriends', (req, res) => {
             // Check for mandatories
             const { miss, extra, ok } = checkFields(['idUser'], req.body);
 
@@ -54,7 +54,7 @@ class FriendsRouterClass {
             if( !ok ){ sendFieldsError( res, 'Bad fields provided', miss, extra ) }
 
             // Use controller function
-            getFriends(req.body)
+            getAllFriends(req.body)
             .then( apiRes =>  sendApiSuccessResponse(res, 'Friend accepted', apiRes) )
             .catch( apiErr => sendApiErrorResponse(res, 'Friend not accepted', apiErr) )
         });

@@ -28,7 +28,8 @@ const userSchema = new Schema({
     lastCallApi: {
         type: Date,
         default: Date.now
-      }
+    },
+    totalPoints: { type: Number, default: 0 }
 })
 //
 

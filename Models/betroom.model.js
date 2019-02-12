@@ -18,6 +18,7 @@ const betRoomSchema = new Schema({
     statut: String,
     betsNumber: Number,
     ranking: { type: Schema.Types.ObjectId },
+    winner: { Type:String, default: ""}
 })
 //
 
