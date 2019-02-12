@@ -75,7 +75,7 @@ updateMatches = () => {
                 statut: match.status,
             }
             
-            MatchModel.findOneAndUpdate({_id: match._id}, update, { upsert: true }, (error, result) => {
+            MatchModel.findOneAndUpdate({_id: match.id}, update, { upsert: true }, (error, result) => {
                 if (!error) {
                     if (!result) {
                         result = new MatchModel({
