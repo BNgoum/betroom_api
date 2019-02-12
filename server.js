@@ -59,6 +59,13 @@ updateMatches = () => {
     })
     .then(data => {
         data.matches.forEach((match) => {
+            let scoreHT, scoreAT = 0;
+
+            if (match.score.fullTime.homeTeam !== null) {
+                scoreHT = match.score.fullTime.homeTeam;
+                scoreAT = match.score.fullTime.awayTeam;
+            }
+
             let update = {
                 homeTeam: match.homeTeam.name,
                 awayTeam: match.awayTeam.name,
@@ -67,16 +74,10 @@ updateMatches = () => {
                 scoreAwayTeam: scoreAT,
                 statut: match.status,
             }
+            
             MatchModel.findOneAndUpdate({_id: match._id}, update, { upsert: true }, (error, result) => {
                 if (!error) {
                     if (!result) {
-                        let scoreHT, scoreAT = 0;
-
-                        if (match.score.fullTime.homeTeam !== null) {
-                            scoreHT = match.score.fullTime.homeTeam;
-                            scoreAT = match.score.fullTime.awayTeam;
-                        }
-            
                         result = new MatchModel({
                             _id: match.id,
                             championnat: match.competition.name,
