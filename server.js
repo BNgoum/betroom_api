@@ -67,8 +67,13 @@ updateMatches = () => {
             }
 
             let update = {
+                _id: match.id,
+                championnat: match.competition.name,
                 homeTeam: match.homeTeam.name,
                 awayTeam: match.awayTeam.name,
+                dateHeureMatch: match.utcDate,
+                dateMatch: moment(match.utcDate).format('DD-MM-YYYY'),
+                heureMatch: moment(match.utcDate).format('HH:mm'),
                 gagnant: match.score.winner,
                 scoreHomeTeam: scoreHT,
                 scoreAwayTeam: scoreAT,
