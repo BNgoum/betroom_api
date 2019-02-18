@@ -50,8 +50,10 @@ const now = moment().format('YYYY-MM-DD');
 const nextWeek = moment().add(7, 'd').format('YYYY-MM-DD');
 const MatchModel = require('./Models/match.model');
 
+
 updateMatches = () => {
-    fetch('https://api.football-data.org/v2/matches?competitions=' + championnats + '&dateFrom=' + now + '&dateTo=' + nextWeek, {
+    console.log('One call')
+    fetch('https://api.football-data.org/v2/matches?competitions=' + championnats + '&dateFrom=' + now + '&dateTo=' + now, {
         headers: apiHeaders
     })
     .then(response => {
@@ -80,7 +82,7 @@ updateMatches = () => {
                 statut: match.status,
             }
             
-            MatchModel.findOneAndUpdate({_id: match.id}, update, { upsert: true }, (error, result) => {
+            MatchModel.findOneAndUpdate({_id: match.id}, update, { upsert: true, new: true }, (error, result) => {
                 if (!error) {
                     if (!result) {
                         result = new MatchModel({
@@ -173,7 +175,7 @@ updateMatches = () => {
 //     })
 // }
 
-setInterval(updateMatches, 30000);
+setInterval(updateMatches, 20000);
 
 app.listen(port, () => {
     console.log(`Listen on http://localhost:${port}`);

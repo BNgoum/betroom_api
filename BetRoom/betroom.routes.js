@@ -3,7 +3,7 @@ Imports
 */
 const express = require('express');
 const BetRoomRouter = express.Router({ mergeParams: true });
-const { create, getBetRoom, addOwner, addParticipant, getAllBetRoomOwner, getAllBetRoomParticipant, setTeamScore, updateScoreMatch, updatePoints } = require('./betroom.controller');
+const { create, getBetRoom, addOwner, addParticipant, getAllBetRoomOwner, getAllBetRoomParticipant, setTeamScore, updateScoreMatch, updatePoints, updatePointsBR } = require('./betroom.controller');
 
 // INNER
 const { checkFields } = require('../Services/request.checker');
@@ -141,7 +141,7 @@ class BetRoomRouterClass {
             .catch( apiErr => sendApiErrorResponse(res, 'Error when match updating : ', apiErr) )
         });
 
-        // Updated points
+        // Updated points for a match
         BetRoomRouter.put('/put/pointsUpdated', (req, res) => {
             // Check for mandatories
             const { miss, extra, ok } = checkFields(['_id', 'typeParticipant', 'idBetRoom', 'idMatch', 'points'], req.body);
@@ -151,6 +151,20 @@ class BetRoomRouterClass {
 
             // Use controller function
             updatePoints(req.body)
+            .then( apiRes => sendApiSuccessResponse(res, 'Points updated : ', apiRes) )
+            .catch( apiErr => sendApiErrorResponse(res, 'Error when points updating : ', apiErr) )
+        });
+
+        // Updated points for a Bet Room
+        BetRoomRouter.put('/put/pointsUpdatedBR', (req, res) => {
+            // Check for mandatories
+            const { miss, extra, ok } = checkFields(['_id', 'typeParticipant', 'idBetRoom', 'points'], req.body);
+
+            // Check oppropriated values
+            if( !ok ){ sendFieldsError( res, 'Bad fields provided', miss, extra ) }
+
+            // Use controller function
+            updatePointsBR(req.body)
             .then( apiRes => sendApiSuccessResponse(res, 'Points updated : ', apiRes) )
             .catch( apiErr => sendApiErrorResponse(res, 'Error when points updating : ', apiErr) )
         });
