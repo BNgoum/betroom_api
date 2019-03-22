@@ -53,7 +53,7 @@ const MatchModel = require('./Models/match.model');
 
 updateMatches = () => {
     console.log('One call')
-    fetch('https://api.football-data.org/v2/matches?competitions=' + championnats + '&dateFrom=' + now + '&dateTo=' + now, {
+    fetch('https://api.football-data.org/v2/matches?competitions=' + championnats + '&dateFrom=' + now + '&dateTo=' + nextWeek, {
         headers: apiHeaders
     })
     .then(response => {

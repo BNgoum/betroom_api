@@ -262,7 +262,7 @@ const updateScoreMatch = body => {
 const updatePoints = body => {
     // Request to set points win for a match
     return new Promise((resolve, reject) => {
-        UserModel.findById({ _id: body._id } , (error, success) => {
+        UserModel.findOne({ _id: body._id }, function (error, success) {
             if(error) { // Mongo Error
                 return reject(error)
             }
@@ -271,7 +271,10 @@ const updatePoints = body => {
                     success.bet_room.owner.map(betroom => {     
                         if ( betroom._id == body.idBetRoom ) {
                             betroom.matchs.map(match => {
-                                if ( match._id == body.idMatch) { match.points = body.points }
+                                if ( match._id == body.idMatch) {
+                                    match.points = body.points;
+                                    console.log('Pour le match de : ', match.homeTeam, match.awayTeam)
+                                }
                             })
                         }
                     })
@@ -279,18 +282,16 @@ const updatePoints = body => {
                     success.bet_room.participant.map(betroom => {      
                         if ( betroom._id == body.idBetRoom ) {
                             betroom.matchs.map(match => {
-                                if ( match._id == body.idMatch) { match.points = body.points }
+                                if ( match._id == body.idMatch) { match.points = body.points; resolve(success) }
                             })
                         }
                     })
                 }
 
-                UserModel.findByIdAndUpdate({ _id: body._id },{ bet_room: success.bet_room }, (err, user) => {
-                    if(err) { // Mongo Error
-                        return reject(err)
-                    }
+                success.save(function (error, res) {
+                    if(error) console.error('Erreur lors du save du update match points: ', error)
 
-                    if(user) { resolve(success.bet_room) }
+                    return resolve(res)
                 })
             }
         })
@@ -308,25 +309,32 @@ const updatePointsBR = body => {
                 if ( body.typeParticipant === "owner" ) {
                     success.bet_room.owner.map(betroom => {     
                         if ( betroom._id == body.idBetRoom ) {
-                            betroom.totalPoints = body.points
+                            betroom.totalPoints = body.points;
+
+                            resolve(success)
                         }
                     })
                 } else {
                     success.bet_room.participant.map(betroom => {      
                         if ( betroom._id == body.idBetRoom ) {
-                            betroom.totalPoints = body.points
+                            betroom.totalPoints = body.points;
+
+                            resolve(success)
                         }
                     })
                 }
-
-                UserModel.findByIdAndUpdate({ _id: body._id },{ bet_room: success.bet_room }, (err, user) => {
-                    if(err) { // Mongo Error
-                        return reject(err)
-                    }
-
-                    if(user) { resolve(success.bet_room) }
-                })
             }
+        })
+    })
+    .then(betroom => {
+        //console.log('Success : ', betroom)
+        UserModel.findOneAndUpdate({ _id: body._id }, { bet_room: betroom.bet_room }, (err, user) => {
+            //console.log('User : ', user)
+            if(err) { // Mongo Error
+                return reject(err)
+            }
+
+            if(user) { return betroom.bet_room }
         })
     })
 }
