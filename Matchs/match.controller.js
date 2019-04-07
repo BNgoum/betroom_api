@@ -126,6 +126,26 @@ const getAllMatchs = () => {
     })
 };
 
+const getAllMatchsPending = () => {
+    return new Promise( (resolve, reject ) => {
+        MatchModel.find({}, (error, matchs) => {
+            if(error) reject(error)
+            else if( !matchs ) reject('Championnat not found')
+            else {
+                let matchsPending = [];
+
+                matchs.map(match => {
+                    if (match.statut === "SCHEDULED") {
+                        matchsPending.push(match)
+                    }
+                })
+                
+                return resolve({matchs: matchsPending});
+            }
+        })
+    })
+};
+
 const getMatch = id => {
     return new Promise( (resolve, reject ) => {
         resolve(fetch('https://api.football-data.org/v2/matches/' + id, {
@@ -145,6 +165,7 @@ Export
 module.exports = {
     getMatchs,
     getMatch,
-    getAllMatchs
+    getAllMatchs,
+    getAllMatchsPending
 }
 //

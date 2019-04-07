@@ -3,7 +3,7 @@ Imports
 */
 const express = require('express');
 const matchRouter = express.Router({ mergeParams: true });
-const { getMatchs, getMatch, getAllMatchs } = require('./match.controller');
+const { getMatchs, getMatch, getAllMatchs, getAllMatchsPending } = require('./match.controller');
 const mongoose = require('mongoose');
 
 // INNER
@@ -65,6 +65,21 @@ class MatchRouterClass {
 
             // Use controller function
             getAllMatchs()
+            .then( apiRes =>  sendApiSuccessResponse(res, 'Matchs of championnat find', apiRes) )
+            .catch( apiErr => sendApiErrorResponse(res, 'Matchs of championnat not find', apiErr) )
+        });
+
+        // Get all matchs in pending
+        matchRouter.get('/matchsPending', (req, res) => {
+
+            // Check for mandatories
+            //const { miss, extra, ok } = checkFields(['championnat'], req.body);
+
+            // Check oppropriated values
+            //if( !ok ){ sendFieldsError( res, 'Bad fields provided', miss, extra ) }
+
+            // Use controller function
+            getAllMatchsPending()
             .then( apiRes =>  sendApiSuccessResponse(res, 'Matchs of championnat find', apiRes) )
             .catch( apiErr => sendApiErrorResponse(res, 'Matchs of championnat not find', apiErr) )
         });
