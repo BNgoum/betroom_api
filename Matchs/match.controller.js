@@ -135,11 +135,11 @@ const getAllMatchsPending = () => {
                 let matchsPending = [];
 
                 matchs.map(match => {
-                    if (match.statut === "SCHEDULED") {
+                    if (match.statut === "SCHEDULED" || match.statut === "IN_PLAY" || match.statut === "LIVE") {
                         matchsPending.push(match)
                     }
                 })
-                
+
                 return resolve({matchs: matchsPending});
             }
         })
