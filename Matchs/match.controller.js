@@ -167,6 +167,16 @@ const getAllMatchsPending = () => {
                     }
                 })
 
+                // Trie des matchs dans l'ordre croissant
+                for (var i in matchsPending) {
+                    // skip loop if the property is from prototype
+                    if (!matchsPending.hasOwnProperty(i)) continue;
+
+                    matchsPending[i].sort(function(a,b) {
+                        return new Date(a.dateHeureMatch) - new Date(b.dateHeureMatch);
+                    });
+                }
+
                 return resolve({matchs: matchsPending});
             }
         })
