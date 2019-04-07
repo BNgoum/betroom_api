@@ -132,11 +132,38 @@ const getAllMatchsPending = () => {
             if(error) reject(error)
             else if( !matchs ) reject('Championnat not found')
             else {
-                let matchsPending = [];
+                let matchsPending = {
+                    "SerieA": [],
+                    "PrimeraDivision": [],
+                    "Ligue1": [],
+                    "Bundesliga": [],
+                    "UEFAChampionsLeague": [],
+                    "PremierLeague": [],
+                }
 
                 matchs.map(match => {
                     if (match.statut === "SCHEDULED" || match.statut === "IN_PLAY" || match.statut === "LIVE") {
-                        matchsPending.push(match)
+                        switch (match.championnat) {
+                            case 'Serie A':
+                                matchsPending.SerieA.push(match);
+                                break;
+                            case 'Primera Division':
+                                matchsPending.PrimeraDivision.push(match);
+                                break;
+                            case 'Ligue 1':
+                                matchsPending.Ligue1.push(match);
+                                break;
+                            case 'Bundesliga':
+                                matchsPending.Bundesliga.push(match);
+                                break;
+                            case 'UEFA Champions League':
+                                matchsPending.UEFAChampionsLeague.push(match);
+                                break;
+                            case 'Premier League':
+                                matchsPending.PremierLeague.push(match);
+                                break;
+                        }
+                       
                     }
                 })
 
